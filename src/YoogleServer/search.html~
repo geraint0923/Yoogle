@@ -27,7 +27,7 @@
 					<td id="showquery" >
 					</td>
 				</tr>
-				<tr onmouseover="this.bgColor='#000000';" onmouseout="this.removeClass('select');">
+				<tr onmouseover="this.addClass('select');" onmouseout="this.removeClass('select');">
 					<td id="showqueryext">
 					</td>
 				</tr>

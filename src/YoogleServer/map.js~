@@ -22,7 +22,6 @@ function initializeMap() {
 function keypress() {
 	var query = document.getElementById("querytext").value;
 	document.getElementById("showquery").innerHTML = query;
-	document.getElementById("showqueryext").innerHTML = query;
 	if(query.length == 0) {
 		return;
 	}
