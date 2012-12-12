@@ -25,7 +25,7 @@ class ydb {
 public:
 	static Handle<Value> insert_record(const Arguments &args);
 
-	static ydb *get_instance();
+	static Handle<Value> prefix_search(const Arguments &args);
 
 	ydb() {}
 	~ydb();
@@ -37,9 +37,10 @@ private:
 
 	trie word_trie;
 	
+	static ydb *get_instance();
 
 	double cal_distance(double x1, double y1, double x2, double y2);
-	void process_entry(struct entry &ent);
+	void process_keyword(char *key, int id);
 
 
 

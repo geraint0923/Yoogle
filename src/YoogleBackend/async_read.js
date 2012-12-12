@@ -19,12 +19,13 @@ function readLines(input, func) {
 		if (remaining.length > 0) {
 			func(remaining);
 		}
+		ydb.prefix_search('chan');
 	});
 }
 
 function func(data) {
 	  var record = JSON.parse(data);
-	  console.log(record["name"]);
+//	  console.log(record["name"]);
 	  ydb.insert_record(record["_id"], 
 			  record["addr"],
 			  record["fetdt"]["$date"],
@@ -37,3 +38,5 @@ function func(data) {
 
 var input = fs.createReadStream('data.json');
 readLines(input, func);
+
+//ydb.prefix_search();
