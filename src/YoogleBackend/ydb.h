@@ -3,30 +3,40 @@
 
 #include <node.h>
 #include <v8.h>
+#include <vector>
 
-
+using namespace std;
 using namespace v8;
 using namespace node;
 
+struct entry {
+	int id;
+	char *addr;
+	long long date;
+	double lat_coord;
+	double lng_coord;
+	char *name;
+	int post_code;
+	char *url;
+};
 
-class ydb : ObjectWrap {
+class ydb {
 public:
+	static Handle<Value> insert_record(const Arguments &args);
+
+	static ydb *get_instance();
+
 	ydb() {}
 	~ydb() {}
 
-	int create_index(const char *datapath);
-
-	void helloworld();
-
-	static Handle<Value> New(const Arguments &args);
-
-	static void Initialize(Handle<Object> target);
-
-	static Handle<Value> get(const Arguments &args);
-
 private:
+	static ydb *instance;
+	
+	vector<entry> entry_list;
+	
 
 	double cal_distance(double x1, double y1, double x2, double y2);
+	void process_entry(struct entry &ent);
 
 
 

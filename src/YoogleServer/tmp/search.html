@@ -7,6 +7,15 @@
 		</script>
 		<script src="map.js" language="javascript" type="text/javascript">
 		</script>
+
+		<style>
+			.test1 {
+background:#F00;
+			}
+			.test1:hover {
+background:#0FF;
+			}
+		</style>
 	</head>
 	<body onload="initializeMap();">
 		<div class="InputBody" id="input" style="boarder:10px solid #000000;">
@@ -27,7 +36,7 @@
 					<td id="showquery" >
 					</td>
 				</tr>
-				<tr onmouseover="this.bgColor='#000000';" onmouseout="this.removeClass('select');">
+				<tr class="test1"> <!-- onmouseover="this.bgColor='#000000';" onmouseout="this.removeClass('select');"-->
 					<td id="showqueryext">
 					</td>
 				</tr>
