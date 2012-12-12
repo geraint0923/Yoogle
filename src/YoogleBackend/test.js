@@ -32,4 +32,4 @@ function func(data) {
 
 readLines('data.json', func);
 
-ydb.prefix_search('gir');
+ydb.prefix_search('school');

@@ -78,10 +78,24 @@ Handle<Value> ydb::insert_record(const Arguments &args) {
 	return Undefined();
 }
 
+Handle<Value> ydb::set_position(double lat, double lng) {
+	ydb *db = get_instance();
+
+	db->lat_coord = lat;
+	db->lng_coord = lng;
+
+	return Undefined();
+}
+
+
 Handle<Value> ydb::prefix_search(const Arguments &args) {
 	ydb *db = get_instance();
 
 	char *buffer = init_str(args, 0);
+
+	/* large -> small */
+	double dist_list[] = {999999, 999999, 999999, 999999, 999999, 999999};
+	int idx_list[] = {-1, -1, -1, -1, -1};
 
 	set<int> res;
 
@@ -100,8 +114,48 @@ Handle<Value> ydb::prefix_search(const Arguments &args) {
 
 	set<int>::iterator iter = res.begin(), endi = res.end();
 	while(iter != endi) {
-		printf("%d------%s\n", *iter, db->entry_list[*iter].name);
+		int idx = *iter;
 		++iter;
+
+		double dist = cal_distance(db->lat_coord, db->lng_coord, 
+				db->entry_list[idx].lat_coord, db->entry_list[idx].lng_coord);
+		int max_i = -1, i;
+		for(i = 0; i < 5; ++i) {
+			if(dist < dist_list[i]) {
+				if(max_i == -1) {
+					max_i = i;
+				} else {
+					if(dist_list[i] > dist_list[max_i]) {
+						max_i = i;
+					}
+				}
+			}
+		}
+		if(max_i != -1) {
+			dist_list[max_i] = dist;
+			idx_list[max_i] = idx;
+		}
+		printf("%d------%s     %lf\n", idx, db->entry_list[idx].name, dist);
+	}
+	printf("top 5:\n");
+	
+	vector<int> res_idx;
+	for(int i = 0; i < 5; ++i) {
+		int min_i = -1;
+		double min_d = 99999;
+		for(int j = 0; j < 5; ++j) {
+			if(idx_list[j] != -1) {
+				if(dist_list[j] < min_d) {
+					min_i = j;
+					min_d = dist_list[j];
+				}
+			}
+		}
+		if(min_i == -1)
+			break;
+		res_idx.push_back(idx_list[min_i]);
+		idx_list[min_i] = -1;
+		printf("%d------%s, %lf\n", res_idx[i], db->entry_list[res_idx[i]].name, dist_list[min_i]);
 	}
 	printf("finish?  %lf\n", sec);
 

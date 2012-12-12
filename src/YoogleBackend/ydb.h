@@ -27,7 +27,9 @@ public:
 
 	static Handle<Value> prefix_search(const Arguments &args);
 
-	ydb() {}
+	static Handle<Value> set_position(double lat, double lng);
+
+	ydb() { lat_coord = 1.3; lng_coord = 103; }
 	~ydb();
 
 private:
@@ -36,10 +38,12 @@ private:
 	vector<entry> entry_list;
 
 	trie word_trie;
+	double lat_coord;
+	double lng_coord;
 	
 	static ydb *get_instance();
 
-	double cal_distance(double x1, double y1, double x2, double y2);
+	static double cal_distance(double x1, double y1, double x2, double y2);
 	void process_keyword(char *key, int id);
 
 
