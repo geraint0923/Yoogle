@@ -24,7 +24,7 @@ function readLines(input, func) {
 
 function func(data) {
 	  var record = JSON.parse(data);
-	  //console.log(record["addr"]);
+	  console.log(record["name"]);
 	  ydb.insert_record(record["_id"], 
 			  record["addr"],
 			  record["fetdt"]["$date"],

@@ -4,6 +4,7 @@
 #include <node.h>
 #include <v8.h>
 #include <vector>
+#include "trie.h"
 
 using namespace std;
 using namespace v8;
@@ -27,12 +28,14 @@ public:
 	static ydb *get_instance();
 
 	ydb() {}
-	~ydb() {}
+	~ydb();
 
 private:
 	static ydb *instance;
 	
 	vector<entry> entry_list;
+
+	trie word_trie;
 	
 
 	double cal_distance(double x1, double y1, double x2, double y2);

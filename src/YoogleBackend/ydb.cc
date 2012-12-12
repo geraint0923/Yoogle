@@ -49,7 +49,8 @@ Handle<Value> ydb::insert_record(const Arguments &args) {
 		db->process_entry(ent);
 
 		db->entry_list.push_back(ent);
-		printf("%d\n", db->entry_list.size());
+		
+		//printf("%d\n", db->entry_list.size());
 	}
 
 	return Undefined();
@@ -72,6 +73,18 @@ void ydb::process_entry(struct entry &ent) {
 
 
 
+ydb::~ydb() {
+	int len = entry_list.size();
+	for(int i = 0; i < len; ++i) {
+		struct entry &ent = entry_list[i];
+		delete ent.addr;
+		delete ent.name;
+		delete ent.url;
+	}
+	entry_list.clear();
+
+	instance = NULL;
+}
 
 
 extern "C" {
