@@ -71,6 +71,8 @@ Handle<Value> ydb::insert_record(const Arguments &args) {
 		db->process_keyword(ent.name, db->entry_list.size());
 
 		db->entry_list.push_back(ent);
+
+		++(db->entry_count);
 		
 		//printf("%d\n", db->entry_list.size());
 	}
@@ -99,16 +101,56 @@ Handle<Value> ydb::prefix_search(const Arguments &args) {
 	double dist_list[] = {999999, 999999, 999999, 999999, 999999, 999999};
 	int idx_list[] = {-1, -1, -1, -1, -1};
 
-	set<int> res;
+	vector<int> res;
+	set<int> tmp_res;
+
+	if(!db->count_list) {
+		db->count_list = new int[db->entry_count];
+	}
+	memset(db->count_list, 0, sizeof(int) * db->entry_count);
 
 	double sec;
 	struct timeval start_val, end_val;
+
 	gettimeofday(&start_val, NULL);
 
-	db->word_trie.prefix_search(buffer, res);
+
+	int origin_len = strlen(buffer) + 1;
+	int seg_count = 0;
+	
+	bool start = false;
+	char *pbegin = NULL;
+	for(int i = 0; i < origin_len; ++i) {
+		if(trie::is_seperator(buffer[i])) {
+			if(start) {
+				start = false;
+				buffer[i] = 0;
+				tmp_res.clear();
+				res.clear();
+				++seg_count;
+				db->word_trie.prefix_search((const char*)pbegin, tmp_res);
+				set<int>::iterator iter = tmp_res.begin(), endi = tmp_res.end();
+				while(iter != endi) {
+					++(db->count_list[*iter]);
+					if(db->count_list[*iter] == seg_count) {
+						res.push_back(*iter);
+					}
+					++iter;
+				}
+				//printf("OK!!");
+			} else {
+				continue;
+			}
+		} else {
+			if(!start)
+				pbegin = buffer + i;
+			start = true;
+		}
+	}
 
 
-	set<int>::iterator iter = res.begin(), endi = res.end();
+
+	vector<int>::iterator iter = res.begin(), endi = res.end();
 	while(iter != endi) {
 		int idx = *iter;
 		++iter;

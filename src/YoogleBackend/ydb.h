@@ -29,7 +29,7 @@ public:
 
 	static Handle<Value> set_position(double lat, double lng);
 
-	ydb() { lat_coord = 1.3; lng_coord = 103; }
+	ydb() { lat_coord = 1.3; lng_coord = 103; entry_count = 0; count_list = NULL; }
 	~ydb();
 
 private:
@@ -41,6 +41,7 @@ private:
 	double lat_coord;
 	double lng_coord;
 	int *count_list;
+	int entry_count;
 	
 	static ydb *get_instance();
 

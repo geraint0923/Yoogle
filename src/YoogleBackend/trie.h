@@ -24,6 +24,8 @@ public:
 
 	void prefix_search(const char *prefix, set<int> &result);
 
+	static bool is_seperator(char ch);
+
 private:
 	struct trie_node trie_root;
 
@@ -36,8 +38,6 @@ private:
 	struct trie_node *add_node(struct trie_node *parent, char ch_id);
 
 	struct trie_node *find_node(const char *pfx, int len, bool create);
-
-	bool is_seperator(char ch);
 
 	static void delete_trie_node(trie *ptrie, struct trie_node *pnode, void *pvoid);
 	
