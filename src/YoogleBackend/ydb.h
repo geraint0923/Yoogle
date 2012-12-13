@@ -40,6 +40,7 @@ private:
 	trie word_trie;
 	double lat_coord;
 	double lng_coord;
+	int *count_list;
 	
 	static ydb *get_instance();
 

@@ -32,4 +32,4 @@ function func(data) {
 
 readLines('data.json', func);
 
-ydb.prefix_search('school');
+console.log(ydb.prefix_search('school'));

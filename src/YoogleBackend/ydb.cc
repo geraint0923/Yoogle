@@ -89,6 +89,8 @@ Handle<Value> ydb::set_position(double lat, double lng) {
 
 
 Handle<Value> ydb::prefix_search(const Arguments &args) {
+	HandleScope scope;
+
 	ydb *db = get_instance();
 
 	char *buffer = init_str(args, 0);
@@ -105,12 +107,6 @@ Handle<Value> ydb::prefix_search(const Arguments &args) {
 
 	db->word_trie.prefix_search(buffer, res);
 
-	gettimeofday(&end_val, NULL);
-
-	end_val.tv_sec -= start_val.tv_sec;
-	end_val.tv_usec -= start_val.tv_usec;
-
-	sec = end_val.tv_sec + (double)end_val.tv_usec / 1000000.0;
 
 	set<int>::iterator iter = res.begin(), endi = res.end();
 	while(iter != endi) {
@@ -135,10 +131,17 @@ Handle<Value> ydb::prefix_search(const Arguments &args) {
 			dist_list[max_i] = dist;
 			idx_list[max_i] = idx;
 		}
-		printf("%d------%s     %lf\n", idx, db->entry_list[idx].name, dist);
+		//printf("%d------%s     %lf\n", idx, db->entry_list[idx].name, dist);
 	}
 	printf("top 5:\n");
 	
+	int ec = 0;
+	for(int i = 0; i < 5; ++i) {
+		if(idx_list[i] != -1) {
+			++ec;
+		}
+	}
+	Local<Array> ret_result = Array::New(ec);
 	vector<int> res_idx;
 	for(int i = 0; i < 5; ++i) {
 		int min_i = -1;
@@ -156,13 +159,37 @@ Handle<Value> ydb::prefix_search(const Arguments &args) {
 		res_idx.push_back(idx_list[min_i]);
 		idx_list[min_i] = -1;
 		printf("%d------%s, %lf\n", res_idx[i], db->entry_list[res_idx[i]].name, dist_list[min_i]);
+		
+		Local<Object> res_ent = Object::New();
+		struct entry *pent = &(db->entry_list[res_idx[i]]);
+		res_ent->Set(String::New("id"), Integer::New(pent->id));
+		res_ent->Set(String::New("addr"), String::New(pent->addr));
+		//res_ent->Set(String::New("date"), Integer::New(pent->date));
+		res_ent->Set(String::New("lat_coord"), Number::New(pent->lat_coord));
+		res_ent->Set(String::New("lng_coord"), Number::New(pent->lng_coord));
+		res_ent->Set(String::New("name"), String::New(pent->name));
+		res_ent->Set(String::New("post_code"), Integer::New(pent->post_code));
+		res_ent->Set(String::New("url"), String::New(pent->url));
+
+		ret_result->Set(i, res_ent);
 	}
+
+	gettimeofday(&end_val, NULL);
+
+	end_val.tv_sec -= start_val.tv_sec;
+	end_val.tv_usec -= start_val.tv_usec;
+
+	sec = end_val.tv_sec + (double)end_val.tv_usec / 1000000.0;
+
 	printf("finish?  %lf\n", sec);
 
+	Local<Object> obj = Object::New();
+	obj->Set(String::New("result"), ret_result);
+	obj->Set(String::New("time"), Number::New(sec));
 
 	delete buffer;
 
-	return Undefined();
+	return scope.Close(obj);
 }
 
 ydb *ydb::get_instance() {
