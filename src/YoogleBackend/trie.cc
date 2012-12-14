@@ -17,7 +17,7 @@ void trie::insert_entry(const char *str, const int id) {
 
 void trie::prefix_search(const char *prefix, set<int> &result) {
 	struct trie_node *pnode = find_node(prefix, strlen(prefix), false);
-	printf("pnode:0x%08x\n", pnode);
+	//printf("pnode:0x%08x\n", pnode);
 	if(pnode) {
 		dfs_traverse(pnode, add_trie_node_set, (void*)&result);
 	}
@@ -39,11 +39,11 @@ bool trie::dissect_string(const char *str, const int id) {
 	int len = strlen(str);
 	int acc = 0;
 	bool dissect = false;
-	for(int i = 0; i < len; ++i) {
-		if(is_seperator(str[i]) || i == len - 1) {
+	for(int i = 0; i <= len; ++i) {
+		if(is_seperator(str[i])) {
 			insert_word(str + i - acc, acc, id);
 			acc = 0;
-			if(i != len - 1) {
+			if(i != len) {
 				dissect = true;
 			}
 		} else {
@@ -78,6 +78,7 @@ void trie::dfs_traverse(struct trie_node *node,
 }
 
 struct trie_node *trie::find_node(const char *pfx, int len, bool create) {
+	//printf("pfx:%s\n", pfx);
 	struct trie_node *pnode = &trie_root;
 	for(int i = 0; i < len; ++i) {
 		if(pnode->char_map[(unsigned char)pfx[i]]) {
@@ -108,7 +109,9 @@ struct trie_node *trie::add_node(struct trie_node *parent, char ch_id) {
 }
 
 void trie::delete_trie_node(trie *ptrie, struct trie_node *pnode, void *pvoid) {
-	delete pnode;
+	if(pnode != &(ptrie->trie_root)) {
+			delete pnode;
+	}
 }
 
 void trie::add_trie_node_set(trie *ptrie, struct trie_node *pnode, void *pvoid) {

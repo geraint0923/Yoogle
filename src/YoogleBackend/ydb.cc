@@ -97,6 +97,11 @@ Handle<Value> ydb::prefix_search(const Arguments &args) {
 
 	char *buffer = init_str(args, 0);
 
+	int buffer_len = strlen(buffer);
+	for(int i = 0; i < buffer_len; ++i) {
+		buffer[i] = tolower(buffer[i]);
+	}
+
 	/* large -> small */
 	double dist_list[] = {999999, 999999, 999999, 999999, 999999, 999999};
 	int idx_list[] = {-1, -1, -1, -1, -1};

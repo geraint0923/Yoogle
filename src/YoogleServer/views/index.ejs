@@ -5,34 +5,77 @@
 		<link href="stylesheets/layout.css" rel="stylesheet" type="text/css">
 		<link href="stylesheets/jquery-ui.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-		<script src="javascripts/map.js" language="javascript" type="text/javascript"></script>
 		<script src="javascripts/jquery.js" language="javascript" type="text/javascript"></script>
 		<script src="javascripts/jquery-ui.js" language="javascript" type="text/javascript"></script>
+		<script src="javascripts/map.js" language="javascript" type="text/javascript"></script>
+		<script type="text/javascript">
+			var input_string = "";
+			$(document).ready(function() {
+				//	$("#querytext").hide();
+					$("#querytext").keyup(function() {
+						if(input_string == $("#querytext").val())
+							return;
+						input_string = $("#querytext").val();
+						//keypress();
+						$.ajax({
+							url : 'list_search',
+							data : { query : input_string },
+							type : "POST",
+							dataType : 'json',
+							success : function(json) {
+								//alert(json['time']);
+								//$("li").remove();
+								//alert("time:"+json.time+" length:"+res_list.length);
+								$("#query").find("li").remove();
+								//$("#query").html("i");
+								//document.getElementById("query").innerHTML="";
+								
+								var res_list = json.result;
+								for(var i = 0; i < res_list.length; ++i) {
+									var litem = "<li class='ResultItem'>";
+									litem += "<div class='ResultItemMarker'><img src='images/mark_"+i+".png'/></div>";
+									litem += "<div class='ResultItemContent'>";
+									//$("#query").append("<li class='ResultItem'>"+res_list[i].name+"</li>");
+									litem += "<a class='ResultItemName' href="+res_list[i].url+">"+res_list[i].name+"</a><br>";
+									litem += res_list[i].addr.replace(/\n/g, "<br>")+"<br>";
+									litem += res_list[i].post_code+"  · "+"<a class='ResultItemHref' href="+res_list[i].url+">"+res_list[i].url+"</a>";
+									litem += "</div></li>";
+									$("#query").append(litem);
+								}
+							},
+							error : function(err) {
+								alert('error!!!');
+							}
+						});
+						/*
+						$.post("list_search", {query : $("#querytext").val()}, function(json) {
+								var res_list = json.result;
+								$("#query").html("");
+								for(var i = 0; i < res_list.length; ++i) {
+									$("#query").append("<li class='ResultItem'>"+res_list[i].name+"</li>");
+								}
 
-		<style>
-			.test1 {
-background:#F00;
-			}
-			.test1:hover {
-background:#0FF;
-			}
+						}, 'json');
+						*/
+					});
+			});
+		</script>
+
 		</style>
 	</head>
 	<body onload="initializeMap();">
 		<div class="InputBody" id="input" style="boarder:10px solid #000000;">
-			<input id="querytext" onKeyUp="keypress();">
+			<input id="querytext" type="text">
 		</div>
-		<div class="ResultBody" id="result" style="overflow-y:auto;">
-			<table id="query">
-				<tr onmouseover="this.addClass('select');" onmouseout="this.removeClass('select');">
-					<td id="showquery" >
-					</td>
-				</tr>
-				<tr class="test1"> <!-- onmouseover="this.bgColor='#000000';" onmouseout="this.removeClass('select');"-->
-					<td id="showqueryext">
-					</td>
-				</tr>
-			</table>
+		<div class="ResultBody" id="result" style="overflow-x:auto;">
+			<ul class="ResultList" id="query">
+			<!--
+				<li id="showquery" class="ResultItem">
+				</li>
+				<li id="showqueryext" class="ResultItem"> 
+				</li>
+				-->
+			</ul>
 		</div>
 		<div class="MapBody" id="map_canvas"></div>
 	</body>

@@ -1,10 +1,11 @@
+
 .MapBody {
 	position : absolute;
 	top : 13%;
 	bottom : 0;
-	left : 28%;
+	left : 31%;
 	right : 0;
-	width : 72%;
+	width : 69%;
 	height : 87%;
 	background : #FFFFFF;
 }
@@ -15,7 +16,7 @@
 	bottom : 0;
 	left : 0;
 	right : 0;
-	width : 28%;
+	width : 31%;
 	height : 87%;
 	background : #FFFFFF;
 }
@@ -31,6 +32,41 @@
 	background : #F1F1F1;
 }
 
-.select {
-	background : #000000;
+.ResultList {
+	top : 0;
+	bottom : 0;
+	left : 0;
+	right : 0;
+	padding : 0;
+	list-style : none;
+}
+
+.ResultItem {
+	background : #FFFFFF;
+	left : 0;
+	font-size : 80%;
+	padding : 10px 10px 10px 10px;
+}
+
+.ResultItem:hover {
+	background : #F3F9FF;
+}
+
+.ResultItemName {
+	font-size : 120%;
+	text-decoration : none;
+}
+
+.ResultItemHref {
+	text-decoration : none;
+}
+
+.ResultItemMarker {
+	float : left;
+	width : 10%;
+	height : 100%;
+}
+
+.ResultItemContent {
+	margin-left : 10%;
 }
