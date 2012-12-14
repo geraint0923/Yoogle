@@ -32,6 +32,24 @@
 	background : #F1F1F1;
 }
 
+.LogoDiv {
+	position : absolute;
+	top : 30%;
+	bottom : 0;
+	left : 3%;
+	right : 0;
+	width : 5%;
+	height : 50%;
+}
+
+.InputDiv {
+	position : absolute;
+	top : 36%;
+	bottom : 0;
+	left : 16%;
+	height : 50%;
+}
+
 .ResultList {
 	top : 0;
 	bottom : 0;
@@ -55,10 +73,12 @@
 .ResultItemName {
 	font-size : 120%;
 	text-decoration : none;
+	color : #2020D0;
 }
 
 .ResultItemHref {
 	text-decoration : none;
+	color : #2020D0;
 }
 
 .ResultItemMarker {
@@ -69,4 +89,10 @@
 
 .ResultItemContent {
 	margin-left : 10%;
+}
+
+.Statement {
+	position : absolute;
+	bottom : 0px;
+	vertical-align : bottom;
 }
