@@ -21,7 +21,7 @@ function markerClick(idx) {
 		icon : "images/mark_"+idx+".png",
 		animation : google.maps.Animation.BOUNCE
 	});
-	map.setCenter(marker.getPosition());
+	map.panTo(marker.getPosition());
 	current_idx = idx;
 }
 
@@ -41,9 +41,9 @@ function initializeMap() {
 		icon : "http://maps.google.com/mapfiles/marker_grey.png",
 		draggable : true
 	});
-	map.setCenter(mymarker.getPosition());
+	map.panTo(mymarker.getPosition());
 	google.maps.event.addListener(mymarker, 'click', function() {
-		map.setCenter(mymarker.getPosition());
+		map.panTo(mymarker.getPosition());
 	});
 	google.maps.event.addListener(mymarker, 'dragend', function(pos) {
 		var pos_data = {
