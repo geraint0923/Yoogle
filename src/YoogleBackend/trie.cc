@@ -28,7 +28,9 @@ bool trie::is_seperator(char ch) {
 			|| ch == '\t'
 			|| ch == '\n'
 			|| ch == '\r'
-			|| ch == 0) {
+			|| ch == 0
+			|| ch =='('
+			|| ch == ')') {
 		return true;
 	}
 	
