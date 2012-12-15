@@ -3,6 +3,10 @@ var current_idx = -1;
 var locationMarker;
 
 function markerClick(idx) {
+	markerOver(idx);
+	map.panTo(marker_list[idx].getPosition());
+}
+function markerOver(idx) {
 	if(current_idx != -1) {
 		var old_marker = marker_list[current_idx];
 		old_marker.setMap(null);
@@ -22,7 +26,6 @@ function markerClick(idx) {
 		icon : "images/mark_"+idx+".png",
 		animation : google.maps.Animation.BOUNCE
 	});
-	map.panTo(marker.getPosition());
 	current_idx = idx;
 }
 
@@ -98,7 +101,7 @@ function keypress(force) {
 								var res_list = json.result;
 								marker_count = res_list.length;
 								for(var i = 0; i < res_list.length; ++i) {
-									var litem = "<li class='ResultItem' onclick=\"markerClick("+i+")\">";
+									var litem = "<li class='ResultItem' onmouseover=\"markerOver("+i+");\" onclick=\"markerClick("+i+")\">";
 									litem += "<div class='ResultItemMarker'><img src='images/mark_"+i+".png'/></div>";
 									litem += "<div class='ResultItemContent'>";
 									//$("#query").append("<li class='ResultItem'>"+res_list[i].name+"</li>");
