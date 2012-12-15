@@ -27,9 +27,9 @@ public:
 
 	static Handle<Value> prefix_search(const Arguments &args);
 
-	static Handle<Value> set_position(double lat, double lng);
+	static Handle<Value> set_position(const Arguments &args);
 
-	ydb() { lat_coord = 1.3; lng_coord = 103; entry_count = 0; count_list = NULL; }
+	ydb() { lat_coord = 1.3; lng_coord = 103.6; entry_count = 0; count_list = NULL; }
 	~ydb();
 
 private:

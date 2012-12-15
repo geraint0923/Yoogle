@@ -15,54 +15,8 @@
 			$(document).ready(function() {
 				//	$("#querytext").hide();
 					$("#querytext").keyup(function() {
-						if(input_string == $("#querytext").val())
-							return;
-						input_string = $("#querytext").val();
-						//keypress();
-						$.ajax({
-							url : 'list_search',
-							data : { query : input_string },
-							type : "POST",
-							dataType : 'json',
-							success : function(json) {
-								//alert(json['time']);
-								//$("li").remove();
-								//alert("time:"+json.time+" length:"+res_list.length);
-								$("#query").find("li").remove();
-								for(var i = 0; i < marker_count; ++i) {
-									marker_list[i].setMap(null);
-								}
-								//$("#query").html("i");
-								//document.getElementById("query").innerHTML="";
-								
-								$(".InputDiv").find("p").remove();
-								$(".InputDiv").append("<p>Elapsed Time : "+json.time+" s</p>");
-								var res_list = json.result;
-								marker_count = res_list.length;
-								for(var i = 0; i < res_list.length; ++i) {
-									var litem = "<li class='ResultItem'>";
-									litem += "<div class='ResultItemMarker'><img src='images/mark_"+i+".png'/></div>";
-									litem += "<div class='ResultItemContent'>";
-									//$("#query").append("<li class='ResultItem'>"+res_list[i].name+"</li>");
-									litem += "<a class='ResultItemName' onclick=\"markerClick("+i+")\">"+res_list[i].name+"</a><br>";
-									litem += res_list[i].addr.replace(/\n/g, "<br>")+"<br>";
-									litem += res_list[i].post_code+"  · "+"<a class='ResultItemHref' href="+res_list[i].url+">"+res_list[i].url+"</a>";
-									litem += "</div></li>";
-									$("#query").append(litem);
-
-									var latlng = new google.maps.LatLng(res_list[i].lat_coord, res_list[i].lng_coord);
-									marker_list[i] = new google.maps.Marker({
-										position : latlng,
-										map : map,
-										title : res_list[i].name,
-										icon : "images/mark_"+i+".png"
-									});
-								}
-							},
-							error : function(err) {
-								alert('error!!!');
-							}
-						});
+						keypress(false);
+					});
 						/*
 						$.post("list_search", {query : $("#querytext").val()}, function(json) {
 								var res_list = json.result;
@@ -73,7 +27,6 @@
 
 						}, 'json');
 						*/
-					});
 			});
 		</script>
 
@@ -85,8 +38,8 @@
 				<img src="images/yoogle_logo.png"/>
 			</div>
 			<div class="InputDiv">
-				<input id="querytext" type="text"> <br>
-				<p id="search_time">Elapsed Time : 0 s</p>
+				<input id="querytext" type="text" size="66"> <br>
+				<span class='TimeText'>Elapsed Time : 0 s</span>
 			</div>
 		</div>
 		<div class="ResultBody" id="result" style="overflow-x:auto;">

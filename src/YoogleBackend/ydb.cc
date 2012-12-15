@@ -80,11 +80,11 @@ Handle<Value> ydb::insert_record(const Arguments &args) {
 	return Undefined();
 }
 
-Handle<Value> ydb::set_position(double lat, double lng) {
+Handle<Value> ydb::set_position(const Arguments &args) {
 	ydb *db = get_instance();
 
-	db->lat_coord = lat;
-	db->lng_coord = lng;
+	db->lat_coord = args[0]->NumberValue();
+	db->lng_coord = args[1]->NumberValue();
 
 	return Undefined();
 }
@@ -281,6 +281,7 @@ extern "C" {
 	static void init(Handle<Object> target) {
 		NODE_SET_METHOD(target, "insert_record", ydb::insert_record);
 		NODE_SET_METHOD(target, "prefix_search", ydb::prefix_search);
+		NODE_SET_METHOD(target, "set_position", ydb::set_position);
 	}
 	
 	NODE_MODULE(ydb, init);

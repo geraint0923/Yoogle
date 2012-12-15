@@ -66,6 +66,7 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 
 app.post('/list_search', search.list_search);
+app.post('/set_position', search.set_position);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
