@@ -1,5 +1,6 @@
 var map;
 var current_idx = -1;
+var locationMarker;
 
 function markerClick(idx) {
 	if(current_idx != -1) {
@@ -34,22 +35,24 @@ function initializeMap() {
 	};
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-	var mymarker = new google.maps.Marker({
+	locationMarker = new google.maps.Marker({
 		position : latlng,
 		map : map,
 		title : "I am here!",
 		icon : "http://maps.google.com/mapfiles/marker_grey.png",
 		draggable : true
 	});
-	map.panTo(mymarker.getPosition());
-	google.maps.event.addListener(mymarker, 'click', function() {
-		map.panTo(mymarker.getPosition());
+	map.panTo(locationMarker.getPosition());
+	google.maps.event.addListener(locationMarker, 'click', function() {
+		map.panTo(locationMarker.getPosition());
 	});
-	google.maps.event.addListener(mymarker, 'dragend', function(pos) {
+	google.maps.event.addListener(locationMarker, 'dragend', function(pos) {
 		var pos_data = {
 			lat_coord : pos.latLng.lat(),
 			lng_coord : pos.latLng.lng()
 		};
+		$("#lat_text").html(pos.latLng.lat());
+		$("#lng_text").html(pos.latLng.lng());
 		$.ajax({
 			url : 'set_position',
 			data : pos_data,
@@ -63,6 +66,10 @@ function initializeMap() {
 			}
 		});
 	});
+}
+
+function focusCenter() {
+	map.panTo(locationMarker.getPosition());
 }
 
 function keypress(force) {

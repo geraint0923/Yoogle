@@ -65,6 +65,20 @@ body {
 	height : 50%;
 }
 
+.LocationDiv {
+	position : absolute;
+	top : 18%;
+	bottom : 0;
+	left : 60%;
+	height : 66%;
+	color : #808080;
+	border : solid 1px #D0D0D0;
+}
+
+.LocationDiv:hover {
+	background : #F3F9FF;
+}
+
 .ResultList {
 	top : 0;
 	bottom : 0;
