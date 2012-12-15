@@ -10,6 +10,9 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		YooglePhone phone = new YooglePhone("192.168.23.142:3000");
+		phone.prefixSearch("girl");
 	}
 
 	@Override
