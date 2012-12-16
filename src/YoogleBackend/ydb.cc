@@ -107,7 +107,7 @@ Handle<Value> ydb::prefix_search(const Arguments &args) {
 	int idx_list[] = {-1, -1, -1, -1, -1};
 
 	vector<int> res;
-	set<int> tmp_res;
+	vector<int> tmp_res;
 
 	if(!db->count_list) {
 		db->count_list = new int[db->entry_count];
@@ -134,7 +134,11 @@ Handle<Value> ydb::prefix_search(const Arguments &args) {
 				res.clear();
 				++seg_count;
 				db->word_trie.prefix_search((const char*)pbegin, tmp_res);
-				set<int>::iterator iter = tmp_res.begin(), endi = tmp_res.end();
+				
+				printf("pbegin:%s count:%d\n", pbegin, tmp_res.size());
+
+
+				vector<int>::iterator iter = tmp_res.begin(), endi = tmp_res.end();
 				while(iter != endi) {
 					++(db->count_list[*iter]);
 					if(db->count_list[*iter] == seg_count) {

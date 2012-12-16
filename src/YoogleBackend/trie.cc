@@ -9,17 +9,23 @@ using namespace std;
 
 
 void trie::insert_entry(const char *str, const int id) {
+	//printf("%s\n", str);
 	if(dissect_string(str, id)) {
 		insert_word(str, strlen(str), id);
 //		printf("insert:%s\n", str);
 	}
 }
 
-void trie::prefix_search(const char *prefix, set<int> &result) {
-	struct trie_node *pnode = find_node(prefix, strlen(prefix), false);
+void trie::prefix_search(const char *prefix, vector<int> &result) {
+	struct trie_node *pnode = find_node(prefix, strlen(prefix), false, 0);
 	//printf("pnode:0x%08x\n", pnode);
 	if(pnode) {
-		dfs_traverse(pnode, add_trie_node_set, (void*)&result);
+		//dfs_traverse(pnode, add_trie_node_set, (void*)&result);
+		set<int>::iterator iter = pnode->id_set.begin(), endi = pnode->id_set.end();
+		while(iter != endi) {
+			result.push_back(*iter);
+			++iter;
+		}
 	}
 }
 
@@ -43,6 +49,7 @@ bool trie::dissect_string(const char *str, const int id) {
 	bool dissect = false;
 	for(int i = 0; i <= len; ++i) {
 		if(is_seperator(str[i])) {
+			//printf("********** %d %d\n", acc, id);
 			insert_word(str + i - acc, acc, id);
 			acc = 0;
 			if(i != len) {
@@ -57,9 +64,9 @@ bool trie::dissect_string(const char *str, const int id) {
 
 
 void trie::insert_word(const char *str, int len, const int id) {
-	struct trie_node *pnode = find_node(str, len, true);
+	struct trie_node *pnode = find_node(str, len, true, id);
 	if(pnode) {
-		pnode->id_set.insert(id);
+		//pnode->id_set.insert(id);
 	} else {
 		printf("error!!! insert_word : null word\n");
 	}
@@ -79,16 +86,22 @@ void trie::dfs_traverse(struct trie_node *node,
 	func(this, node, pvoid);
 }
 
-struct trie_node *trie::find_node(const char *pfx, int len, bool create) {
+struct trie_node *trie::find_node(const char *pfx, int len, bool create, const int id) {
 	//printf("pfx:%s\n", pfx);
 	struct trie_node *pnode = &trie_root;
 	for(int i = 0; i < len; ++i) {
 		if(pnode->char_map[(unsigned char)pfx[i]]) {
 			pnode = pnode->char_map[(unsigned char)pfx[i]]; 
+			if(create) {
+				pnode->id_set.insert(id);
+			}
+			//printf("char:::%c %d\n", pnode->char_id, id);
 		} else {
 			// TODO : create or return NULL
 			if(create) {
 				pnode = add_node(pnode, pfx[i]);
+				//printf("char:::%c %d\n", pnode->char_id, id);
+				pnode->id_set.insert(id);
 			} else {
 	//			printf("find null\n");
 				return NULL;

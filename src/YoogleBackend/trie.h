@@ -22,7 +22,7 @@ public:
 
 	void insert_entry(const char *str, const int id);
 
-	void prefix_search(const char *prefix, set<int> &result);
+	void prefix_search(const char *prefix, vector<int> &result);
 
 	static bool is_seperator(char ch);
 
@@ -37,7 +37,7 @@ private:
 
 	struct trie_node *add_node(struct trie_node *parent, char ch_id);
 
-	struct trie_node *find_node(const char *pfx, int len, bool create);
+	struct trie_node *find_node(const char *pfx, int len, bool create, const int id);
 
 	static void delete_trie_node(trie *ptrie, struct trie_node *pnode, void *pvoid);
 	
