@@ -95,7 +95,9 @@ Handle<Value> ydb::prefix_search(const Arguments &args) {
 
 	ydb *db = get_instance();
 
-	char *buffer = init_str(args, 0);
+	set_position(args);
+
+	char *buffer = init_str(args, 2);
 
 	int buffer_len = strlen(buffer);
 	for(int i = 0; i < buffer_len; ++i) {
@@ -135,7 +137,7 @@ Handle<Value> ydb::prefix_search(const Arguments &args) {
 				++seg_count;
 				db->word_trie.prefix_search((const char*)pbegin, tmp_res);
 				
-				printf("pbegin:%s count:%d\n", pbegin, tmp_res.size());
+				//printf("pbegin:%s count:%d\n", pbegin, tmp_res.size());
 
 
 				vector<int>::iterator iter = tmp_res.begin(), endi = tmp_res.end();

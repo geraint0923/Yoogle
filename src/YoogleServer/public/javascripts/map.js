@@ -2,6 +2,9 @@ var map;
 var current_idx = -1;
 var locationMarker;
 
+var lat = 1.3;
+var lng = 103.72;
+
 function markerClick(idx) {
 	markerOver(idx);
 	map.panTo(marker_list[idx].getPosition());
@@ -30,7 +33,7 @@ function markerOver(idx) {
 }
 
 function initializeMap() {
-	var latlng = new google.maps.LatLng(1.3, 103.6);
+	var latlng = new google.maps.LatLng(lat, lng);
 	var myOptions = {
 		zoom : 12,
 		center : latlng,
@@ -50,24 +53,11 @@ function initializeMap() {
 		map.panTo(locationMarker.getPosition());
 	});
 	google.maps.event.addListener(locationMarker, 'dragend', function(pos) {
-		var pos_data = {
-			lat_coord : pos.latLng.lat(),
-			lng_coord : pos.latLng.lng()
-		};
+		lat = pos.latLng.lat(),
+		lng = pos.latLng.lng()
 		$("#lat_text").html(pos.latLng.lat());
 		$("#lng_text").html(pos.latLng.lng());
-		$.ajax({
-			url : 'set_position',
-			data : pos_data,
-			type : "POST",
-			dataType : 'json',
-			success : function(json) {
-				keypress(true);
-			},
-			error : function(err) {
-				alert("no post data");
-			}
-		});
+		keypress(true);
 	});
 }
 
@@ -82,7 +72,7 @@ function keypress(force) {
 						//keypress();
 						$.ajax({
 							url : 'list_search',
-							data : { query : input_string },
+							data : { lat_coord : lat, lng_coord : lng, query : input_string },
 							type : "POST",
 							dataType : 'json',
 							success : function(json) {
